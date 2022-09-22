@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "build",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitHelpers": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "allowJs": true,
+    "baseUrl": "./src",
+    "paths": {
+      "src/*": ["*"],
+      "components/*": ["components/*"],
+      "constants/*": ["constants/*"],
+      "features/*": ["features/*"],
+      "navigation/*": ["navigation/*"],
+      "screens/*": ["screens/*"]
+    },
+    "resolveJsonModule": true,
+    "jsx": "react-native",
+    "module": "es6",
+    "lib": ["es2018", "dom"],
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "helper"]
+}
