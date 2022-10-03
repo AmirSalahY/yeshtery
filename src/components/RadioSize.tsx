@@ -19,6 +19,7 @@ const RadioSize: React.FC<RadioSizeProps> = ({data, onChange, direction}) => {
       style={[styles.container, direction ? {flexDirection: direction} : null]}>
       {data.map((item: RadioDataProps, index: number) => (
         <TouchableOpacity
+          activeOpacity={1}
           style={styles.RadioSize}
           key={index}
           onPress={() => changeValue(item.value)}>

@@ -68,12 +68,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopRightRadius: 27,
     borderTopLeftRadius: 27,
-    paddingBottom: 20,
     paddingHorizontal: 15,
     flex: 1,
   },
   page: {flex: 1},
-  list: {marginBottom: 60},
+  list: {paddingBottom: 10},
 });
 const headerStyle = StyleSheet.create({
   backgroundImage: {

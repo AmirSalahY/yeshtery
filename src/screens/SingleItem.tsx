@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -94,7 +94,11 @@ const Header = () => {
     </View>
   );
 };
-const SingleItem = () => {
+const SingleItem = ({route}: any) => {
+  const [showPoints, setShowPoints] = useState(1);
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const product = {
     name: 'Fashionable Ruffle Wool Dobby Blouse',
     images: [
@@ -133,8 +137,28 @@ const SingleItem = () => {
       {size: 'L', value: 'large'},
     ],
   };
+  useEffect(() => {
+    console.log(showPoints);
+    console.log(route.params?.scan, 719910);
+  }, [route.params?.scan, showPoints]);
+
   return (
     <SafeAreaView style={styles.page}>
+      {route.params?.scan && showPoints == 1 ? (
+        <TouchableOpacity
+          activeOpacity={0}
+          onPress={() => setShowPoints(0)}
+          style={[styles.overLay, {opacity: showPoints}]}>
+          <>
+            <View style={styles.overlayImageContainer} />
+            <Image
+              source={require('src/assets/images/icons/done.png')}
+              style={styles.overlayImage}
+              resizeMode="contain"
+            />
+          </>
+        </TouchableOpacity>
+      ) : null}
       <Header />
       <ScrollView style={styles.container}>
         <View style={styles.sliderContainer}>
@@ -178,88 +202,49 @@ const SingleItem = () => {
           data={product.sizes}
           onChange={e => console.log(e)}
         />
-        <View style={{flexDirection: 'row', marginTop: 37.92}}>
-          <View style={{flex: 2, flexDirection: 'row'}}>
+        <View style={styles.ctaContainerFirst}>
+          <View style={styles.ctaContainerLeft}>
             <Image
               source={require('src/assets/images/icons/qr.png')}
-              style={{
-                width: 34.53,
-                height: 34.53,
-                marginRight: 10.23,
-                marginLeft: 9,
-              }}
+              style={styles.ctaIcon}
             />
             <View>
-              <Text
-                style={{
-                  color: '#1F54CF',
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 14,
-                  marginVertical: 0,
-                  marginBottom: -10,
-                }}>
-                Color
-              </Text>
-              <Text
-                style={{
-                  color: '#000000',
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 14,
-                  marginVertical: 0,
-                }}>
-                & get 100 points
-              </Text>
+              <Text style={styles.ctaHeader}>Scan</Text>
+              <Text style={styles.ctaText}>& get 100 points</Text>
             </View>
           </View>
-          <LinearGradient
-            start={{x: 0.7, y: 0.1}}
-            end={{x: 0.6, y: 0.9}}
-            locations={[0.1, 19]}
-            colors={['#5C4CDB', '#00E8DB']}
-            style={styles.gradientButton}>
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontFamily: 'Poppins-Medium',
-                fontSize: 14,
-              }}>
-              Scan
-            </Text>
-          </LinearGradient>
+          <TouchableOpacity
+            disabled={!route.params?.scan ? false : true}
+            onPress={() => navigation.navigate('QrScanner')}>
+            {!route.params?.scan ? (
+              <LinearGradient
+                start={{x: 0.7, y: 0.1}}
+                end={{x: 0.6, y: 0.9}}
+                locations={[0.1, 19]}
+                colors={['#5C4CDB', '#00E8DB']}
+                style={styles.ctaButton}>
+                <Text style={styles.ctaButtonText}>Scan</Text>
+              </LinearGradient>
+            ) : (
+              <View style={[styles.disabledCta, styles.ctaButton]}>
+                <Text
+                  style={[styles.ctaButtonText, styles.disabledCtaButtonText]}>
+                  Done
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 20}}>
-          <View style={{flex: 2, flexDirection: 'row'}}>
+        <View style={styles.ctaContainerSecond}>
+          <View style={styles.ctaContainerLeft}>
             <Image
               source={require('src/assets/images/icons/frame.png')}
               resizeMode="contain"
-              style={{
-                height: 32,
-                width: undefined,
-                aspectRatio: 1,
-                marginRight: 10.23,
-                marginLeft: 9,
-              }}
+              style={styles.ctaIcon}
             />
             <View>
-              <Text
-                style={{
-                  color: '#1F54CF',
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 14,
-                  marginVertical: 0,
-                  marginBottom: -10,
-                }}>
-                Buy & Submit
-              </Text>
-              <Text
-                style={{
-                  color: '#000000',
-                  fontFamily: 'Poppins-Medium',
-                  fontSize: 14,
-                  marginVertical: 0,
-                }}>
-                the receipt for 120 points
-              </Text>
+              <Text style={styles.ctaHeader}>Buy & Submit</Text>
+              <Text style={styles.ctaText}>the receipt for 120 points</Text>
             </View>
           </View>
           <LinearGradient
@@ -267,15 +252,8 @@ const SingleItem = () => {
             end={{x: 0.6, y: 0.9}}
             locations={[0.1, 19]}
             colors={['#5C4CDB', '#00E8DB']}
-            style={styles.gradientButton}>
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontFamily: 'Poppins-Medium',
-                fontSize: 14,
-              }}>
-              Add To Cart
-            </Text>
+            style={styles.ctaButton}>
+            <Text style={styles.ctaButtonText}>Add To Cart</Text>
           </LinearGradient>
         </View>
       </ScrollView>
@@ -291,6 +269,34 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 27,
     paddingVertical: 0,
     paddingHorizontal: 15,
+  },
+  ctaText: {
+    color: '#000000',
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+    marginVertical: 0,
+  },
+  ctaHeader: {
+    color: '#1F54CF',
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+    marginVertical: 0,
+    marginBottom: -10,
+  },
+  ctaContainerFirst: {flexDirection: 'row', marginTop: 37.92},
+  ctaContainerSecond: {flexDirection: 'row', marginTop: 20, marginBottom: 20},
+  ctaContainerLeft: {flex: 2, flexDirection: 'row'},
+  ctaButtonText: {
+    color: '#FFFFFF',
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+  },
+  ctaIcon: {
+    height: 32,
+    width: undefined,
+    aspectRatio: 1,
+    marginRight: 10.23,
+    marginLeft: 9,
   },
   image: {
     height: '100%',
@@ -357,12 +363,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  gradientButton: {
+  ctaButton: {
     width: 102,
     height: 40,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  overLay: {
+    flex: 1,
+    position: 'absolute',
+    height: '110%',
+    width: '100%',
+    zIndex: 999,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlayImageContainer: {
+    backgroundColor: '#111827',
+    opacity: 0.4,
+    position: 'absolute',
+    height: '110%',
+    width: '100%',
+  },
+  overlayImage: {width: '80%', height: undefined, aspectRatio: 1},
+  disabledCta: {backgroundColor: '#f5f7fe'},
+  disabledCtaButtonText: {color: '#6BDE7F'},
 });
 export default SingleItem;
